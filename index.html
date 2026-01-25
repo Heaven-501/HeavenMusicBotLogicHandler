@@ -1,97 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heaven Music Leaderboard</title>
-    <style>
-        body {
-            background-color: #121212;
-            color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
-        h1 { text-align: center; color: #bb86fc; }
-        .card {
-            background-color: #1e1e1e;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
-        .rank { font-size: 1.2em; font-weight: bold; color: #03dac6; width: 30px; }
-        .user-info { flex-grow: 1; margin-left: 10px; }
-        .username { font-weight: bold; font-size: 1.1em; }
-        .points { font-size: 1.2em; color: #cf6679; font-weight: bold; }
-        .note { text-align: center; font-size: 0.8em; color: #888; margin-top: 20px; }
-        /* Scrollable container */
-        #leaderboard { max-height: 80vh; overflow-y: auto; }
-    </style>
+  <title>Heaven Leaderboard</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <h1>🏆 Heaven Leaderboard</h1>
-    <div id="leaderboard">Loading...</div>
-    
-    <div class="note">
-        To hide yourself from this list, use <b>/hidelb</b> in the bot.<br>
-        Top 50 Users displayed.
-    </div>
-
-    <script>
-        // Replace this URL with your database URL + "/users.json"
-        const DB_URL = "https://heaven-music-4f8cb-default-rtdb.firebaseio.com//users.json"; 
-
-        async function fetchLeaderboard() {
-            try {
-                const response = await fetch(DB_URL);
-                const data = await response.json();
-                
-                if (!data) return;
-
-                // Convert object to array
-                let users = Object.values(data);
-
-                // Filter out hidden users and sort by points
-                users = users.filter(u => !u.hidden)
-                             .sort((a, b) => b.points - a.points)
-                             .slice(0, 50); // Top 50
-
-                const container = document.getElementById('leaderboard');
-                container.innerHTML = "";
-
-                users.forEach((user, index) => {
-                    let rankEmoji = "🎵";
-                    if(index === 0) rankEmoji = "🥇";
-                    if(index === 1) rankEmoji = "🥈";
-                    if(index === 2) rankEmoji = "🥉";
-
-                    const div = document.createElement('div');
-                    div.className = 'card';
-                    div.innerHTML = `
-                        <div class="rank">${index + 1}</div>
-                        <div class="user-info">
-                            <div class="username">${user.username || "Unknown"}</div>
-                        </div>
-                        <div class="points">${user.points} ${rankEmoji}</div>
-                    `;
-                    container.appendChild(div);
-                });
-
-            } catch (error) {
-                console.error("Error:", error);
-                document.getElementById('leaderboard').innerText = "Error loading data.";
-            }
-        }
-
-        fetchLeaderboard();
-        // Refresh every 10 seconds
-        setInterval(fetchLeaderboard, 10000);
-    </script>
+  <h1>Heaven Music Leaderboard</h1>
+  <ul id="board"></ul>
+  <script src="script.js"></script>
 </body>
 </html>
-
