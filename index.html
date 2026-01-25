@@ -1,13 +1,23 @@
 <!DOCTYPE html>
-<html>
-<body style="margin:0; background:black;">
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Enter</title>
+</head>
+
+<body style="margin:0; background:black; overflow:hidden;">
 
 <button id="enter"
-style="position:fixed; inset:0; font-size:30px;">
-Do not click me!
+style="position:fixed; inset:0; font-size:30px; z-index:10;">
+Do not click that!
 </button>
 
-<video id="vid" loop style="width:100vw; height:100vh; object-fit:cover;">
+<video
+  id="vid"
+  muted
+  loop
+  playsinline
+  style="width:100vw; height:100vh; object-fit:cover;">
   <source src="Rick Roll Link(360P).mp4" type="video/mp4">
 </video>
 
@@ -15,10 +25,14 @@ Do not click me!
   const btn = document.getElementById("enter");
   const video = document.getElementById("vid");
 
-  btn.addEventListener("click", () => {
+  btn.addEventListener("click", async () => {
     btn.remove();
+
+    // start muted (allowed)
+    await video.play();
+
+    // unmute AFTER playback begins
     video.muted = false;
-    video.play();
   });
 </script>
 
