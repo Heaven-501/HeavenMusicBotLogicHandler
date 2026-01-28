@@ -2,26 +2,39 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Telegram Channels</title>
 
   <style>
+    /* Global Reset for box sizing is best practice for mobile layouts */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      /* Using env() ensures the content doesn't get hidden under the notch */
-      padding: 24px 16px;
-      padding-top: calc(24px + env(safe-area-inset-top));
-      padding-bottom: calc(24px + env(safe-area-inset-bottom));
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      padding: 32px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background: #0f172a;
       color: #e5e7eb;
-      /* Improves scrolling smoothness on iOS */
-      -webkit-overflow-scrolling: touch;
+      /* FIXES for iOS: */
+      -webkit-text-size-adjust: 100%; /* Prevents iOS text size adjustment on orientation change */
+      -webkit-font-smoothing: antialiased; /* Makes text sharper on Retina screens */
     }
 
     .container {
       max-width: 560px;
       margin: 0 auto;
+      width: 100%; /* Ensures container doesn't overflow on small iPhone screens */
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #93c5fd;
+      margin: 24px 0 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     .tg-card {
@@ -35,43 +48,74 @@
       text-decoration: none;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
       transition: background 0.2s ease, transform 0.1s ease;
-      
-      /* Removes the gray flash when tapping on iPhone */
-      -webkit-tap-highlight-color: transparent;
+      /* FIX: Removes the default grey tap highlight on iOS to make it feel like an app */
+      -webkit-tap-highlight-color: transparent; 
     }
 
-    /* Rest of your CSS remains the same... */
-    .section-title {
-      font-size: 13px; /* Slightly smaller for better mobile hierarchy */
-      font-weight: 600;
-      color: #93c5fd;
-      margin: 24px 0 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+    .tg-card:active {
+      background: #0f172a; /* Visual feedback on touch */
+      transform: scale(0.98);
+    }
+
+    /* Keep hover for desktop, but active is better for mobile touch */
+    @media (hover: hover) {
+      .tg-card:hover {
+        transform: translateY(-1px);
+        background: #0f172a; 
+      }
     }
 
     .tg-avatar {
-      width: 52px; /* Slightly smaller for mobile optimization */
-      height: 52px;
+      width: 56px;
+      height: 56px;
       border-radius: 50%;
       object-fit: cover;
       flex-shrink: 0;
       border: 1px solid #1e293b;
     }
 
-    /* Prevent text from stretching the card */
     .tg-info {
       flex: 1;
-      min-width: 0; 
+      min-width: 0;
+    }
+
+    .tg-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #f8fafc;
+      /* Ensure text doesn't look weird on small widths */
+      line-height: 1.3;
     }
 
     .tg-desc {
       font-size: 14px;
       color: #94a3b8;
-      margin-top: 2px;
+      margin-top: 4px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    .tg-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #64748b;
+    }
+
+    .tg-arrow {
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .badge {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #1e293b;
+      color: #93c5fd;
+      margin-left: 8px;
+      vertical-align: middle; /* Aligns badge better with text */
     }
   </style>
 </head>
@@ -82,9 +126,8 @@
 
   <div class="section-title">Main Channels</div>
 
-  <!-- Main Channel 1 -->
   <a href="https://t.me/heaven501" class="tg-card">
-    <img src="IMG_20260128_150724_994.jpg" class="tg-avatar">
+    <img src="IMG_20260128_150724_994.jpg" class="tg-avatar" alt="Heaven">
     <div class="tg-info">
       <div class="tg-name">Heaven (天国) 🌀</div>
       <div class="tg-desc">Heaven Main channel.</div>
@@ -92,9 +135,8 @@
     <div class="tg-right"><span class="tg-arrow">›</span></div>
   </a>
 
-  <!-- Main Channel 2 -->
   <a href="https://t.me/heaven501Art" class="tg-card">
-    <img src="IMG_20260128_151533_160.jpg" class="tg-avatar">
+    <img src="IMG_20260128_151533_160.jpg" class="tg-avatar" alt="Art">
     <div class="tg-info">
       <div class="tg-name">Heaven (美術) 🎨</div>
       <div class="tg-desc">Art specified Sub-Channel.</div>
@@ -102,9 +144,8 @@
     <div class="tg-right"><span class="tg-arrow">›</span></div>
   </a>
 
-  <!-- Main Channel 3 -->
   <a href="https://t.me/heaven501fp" class="tg-card">
-    <img src="IMG_20260128_151545_605.jpg" class="tg-avatar">
+    <img src="IMG_20260128_151545_605.jpg" class="tg-avatar" alt="Fumo">
     <div class="tg-info">
       <div class="tg-name">Heaven (フモ ) ☂️</div>
       <div class="tg-desc">Automated channel.</div>
@@ -112,9 +153,8 @@
     <div class="tg-right"><span class="tg-arrow">›</span></div>
   </a>
 
-  <!-- Main Channel 4 -->
   <a href="https://t.me/HeavenMusicLibrary" class="tg-card">
-    <img src="IMG_20260128_151607_162.jpg" class="tg-avatar">
+    <img src="IMG_20260128_151607_162.jpg" class="tg-avatar" alt="Music">
     <div class="tg-info">
       <div class="tg-name">Sound of Heaven</div>
       <div class="tg-desc">Heaven Music channel.</div>
@@ -124,10 +164,8 @@
 
   <div class="section-title">Others</div>
 
-  <!--Other-->
-
   <a href="https://t.me/Fourty44Four" class="tg-card">
-    <img src="IMG_20260128_160945_742.jpg" class="tg-avatar">
+    <img src="IMG_20260128_160945_742.jpg" class="tg-avatar" alt="44">
     <div class="tg-info">
       <div class="tg-name">44<span class="badge">Sponsored</span></div>
       <div class="tg-desc">Circular Videos.</div>
@@ -136,7 +174,7 @@
   </a>
 
   <a href="https://t.me/Fourty44Four" class="tg-card">
-    <img src="IMG_20260128_160945_742.jpg" class="tg-avatar">
+    <img src="IMG_20260128_160945_742.jpg" class="tg-avatar" alt="44">
     <div class="tg-info">
       <div class="tg-name">44<span class="badge">Sponsored</span></div>
       <div class="tg-desc">Circular Videos.</div>
