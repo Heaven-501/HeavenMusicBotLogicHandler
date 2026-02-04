@@ -132,23 +132,30 @@
     }
 
     /* RANK COLORING */
+
+    /* Blue for Mino & Toast */
     .rank-blue {
-      background: linear-gradient(145deg, #081028, #0b4d66);
+      background: linear-gradient(145deg, #07122a, #0b4d66);
       border-color: #38bdf8;
+      box-shadow: 0 6px 18px rgba(8,77,102,0.08), inset 0 1px 0 rgba(255,255,255,0.02);
     }
     .rank-blue .contrib-img { border-color: #38bdf8; }
     .rank-blue .contrib-name { color: #38bdf8; }
 
+    /* Gold / Yellow for the most important contributors */
     .rank-yellow {
-      background: linear-gradient(145deg, #1e293b, #2a2208);
-      border-color: #fbbf24;
+      background: linear-gradient(145deg, #2a2410, #fbbf24);
+      border-color: #f59e0b;
+      box-shadow: 0 6px 18px rgba(251,191,36,0.12), inset 0 1px 0 rgba(255,255,255,0.03);
     }
     .rank-yellow .contrib-img { border-color: #fbbf24; }
     .rank-yellow .contrib-name { color: #fbbf24; }
 
+    /* Silver for other contributors */
     .rank-silver {
-      background: linear-gradient(145deg, #1e293b, #1f2937);
+      background: linear-gradient(145deg, #1e293b, #26303b);
       border-color: #cbd5e1;
+      box-shadow: 0 6px 14px rgba(19,26,33,0.06);
     }
     .rank-silver .contrib-img { border-color: #cbd5e1; }
     .rank-silver .contrib-name { color: #e2e8f0; }
@@ -294,16 +301,19 @@
       <div class="contributors-title">Top Contributors</div>
       
       <div class="contributors-grid">
+        <!-- Blue: Mino -->
         <a href="https://t.me/Minat0O" class="contrib-bubble rank-blue">
           <img src="IMG_20260204_112523_993.jpg" class="contrib-img" alt="Mino">
           <div class="contrib-name">Mino</div>
         </a>
 
+        <!-- Blue: Toast -->
         <a href="https://t.me/ToastMoe" class="contrib-bubble rank-blue">
           <img src="IMG_20260204_134736_733.jpg" class="contrib-img" alt="Toast">
           <div class="contrib-name">Toast</div>
         </a>
 
+        <!-- Silver: others -->
         <a href="#" class="contrib-bubble rank-silver">
           <img src="https://ui-avatars.com/api/?name=S&background=94a3b8&color=fff" class="contrib-img" alt="Mod">
           <div class="contrib-name">Silver Mod</div>
@@ -318,6 +328,13 @@
           <img src="https://ui-avatars.com/api/?name=E&background=334155&color=fff" class="contrib-img" alt="User">
           <div class="contrib-name">Editor</div>
         </a>
+
+        <!-- Example: uncomment to add a yellow/gold top contributor
+        <a href="#" class="contrib-bubble rank-yellow">
+          <img src="https://ui-avatars.com/api/?name=Top&background=fbbf24&color=000" class="contrib-img" alt="Top">
+          <div class="contrib-name">Top Contributor</div>
+        </a>
+        -->
       </div>
     </div>
   </div>
