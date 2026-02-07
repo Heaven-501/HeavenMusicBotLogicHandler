@@ -1,0 +1,31 @@
+name: Update Heaven Ratings
+
+on:
+  schedule:
+    - cron: "30 23 * * *"  # every day at 23:30 UTC
+  workflow_dispatch:
+
+jobs:
+  update-heaven:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Increment Heaven Rating
+        run: python scripts/increment_rating.py
+
+      - name: Commit and Push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add something.yml Mino.html
+          git commit -m "Increment Heaven Rating 🌀 [ci skip]" || echo "No changes"
+          git push
