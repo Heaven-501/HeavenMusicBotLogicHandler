@@ -9,7 +9,7 @@ user = "Mino"
 info = data[user]
 
 # Increment Heaven Rating
-info['current_points'] += info.get('daily_increase', 0.05)
+info['current_points'] += info.get('daily_increase', 0.52)
 current_points = round(info['current_points'], 2)
 
 # Update YAML
