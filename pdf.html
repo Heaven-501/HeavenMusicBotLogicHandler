@@ -29,7 +29,6 @@
     /* --- UI ELEMENTS --- */
     .section-title { font-size: 15px; font-weight: 600; color: #38bdf8; margin: 8px 0 16px; text-transform: uppercase; letter-spacing: 0.04em; }
 
-    /* --- CONVERTER TOOL STYLES --- */
     .converter-card {
       background: #1e293b; border: 1px solid #334155; border-radius: 20px;
       padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
@@ -40,9 +39,9 @@
     .tool-header h3 { margin: 0; font-size: 18px; color: #f8fafc; }
 
     textarea {
-      width: 100%; height: 120px; background: #0f172a; border: 1px solid #334155;
+      width: 100%; height: 160px; background: #0f172a; border: 1px solid #334155;
       border-radius: 12px; padding: 12px; color: #e5e7eb; font-family: inherit;
-      resize: none; margin-bottom: 12px; outline: none;
+      resize: none; margin-bottom: 12px; outline: none; line-height: 1.5;
     }
     textarea:focus { border-color: #38bdf8; }
 
@@ -65,7 +64,7 @@
     .result-area {
       margin-top: 15px; background: #020617; padding: 15px;
       border-radius: 12px; font-size: 13px; white-space: pre-wrap;
-      display: none; border: 1px solid #1e293b; max-height: 200px; overflow-y: auto;
+      display: none; border: 1px solid #1e293b; max-height: 300px; overflow-y: auto;
     }
 
     /* --- BOTTOM NAVIGATION --- */
@@ -90,10 +89,9 @@
     <div class="container">
       <div style="text-align: center; margin-bottom: 30px;">
         <h2 class="community-title">Heaven (天国) 🌀</h2>
-        <p style="color:#94a3b8">Your community hub for tools and links.</p>
+        <p style="color:#94a3b8">Premium Community Tools</p>
       </div>
-      <hr style="border:0; height:1px; background:#1e293b; margin:20px 0;">
-      <p style="text-align:center; font-size: 14px; color:#64748b;">Navigate using the bar below.</p>
+      <p style="text-align:center; font-size: 14px; color:#64748b;">Welcome to the updated Heaven Toolset. Use the Tools tab to convert long documents without page cut-offs.</p>
     </div>
   </div>
 
@@ -106,8 +104,8 @@
           <span>📄</span>
           <h3>Text to PDF</h3>
         </div>
-        <textarea id="pdfText" placeholder="Type your text here to convert to PDF..."></textarea>
-        <button class="action-btn" onclick="convertToPdf()">Download PDF</button>
+        <textarea id="pdfText" placeholder="Paste long text here. Heaven will automatically create as many pages as needed..."></textarea>
+        <button class="action-btn" onclick="convertToPdf()">Generate Multi-Page PDF</button>
       </div>
 
       <div class="converter-card">
@@ -119,7 +117,7 @@
           Tap to upload PDF
         </label>
         <input type="file" id="fileInput" accept="application/pdf" onchange="handleFileSelect(this)">
-        <button class="action-btn" onclick="extractText()">Start Extraction</button>
+        <button class="action-btn" onclick="extractText()">Extract All Pages</button>
         <div id="textResult" class="result-area"></div>
         <button id="copyBtn" class="action-btn secondary" style="display:none; margin-top:10px;" onclick="copyResult()">Copy Extracted Text</button>
       </div>
@@ -138,10 +136,8 @@
   </nav>
 
   <script>
-    // Configure PDF.js Worker
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
 
-    // Navigation Logic
     function switchTab(tabId, navElement) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
@@ -149,20 +145,38 @@
       navElement.classList.add('active');
     }
 
-    // --- TEXT TO PDF LOGIC ---
+    // --- UPDATED: MULTI-PAGE TEXT TO PDF ---
     function convertToPdf() {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
       const text = document.getElementById('pdfText').value;
 
       if (!text.trim()) {
-        alert("Heaven needs some text to work with!");
+        alert("Enter some text first!");
         return;
       }
 
-      const splitText = doc.splitTextToSize(text, 180);
-      doc.text(splitText, 10, 10);
-      doc.save("Heaven_Document.pdf");
+      // PDF Configuration
+      const margin = 15;
+      const pageHeight = doc.internal.pageSize.height;
+      const maxWidth = doc.internal.pageSize.width - (margin * 2);
+      
+      // Split text into lines that fit the width
+      const lines = doc.splitTextToSize(text, maxWidth);
+      
+      let cursorY = margin;
+      
+      lines.forEach(line => {
+        // If the next line would exceed the page height, add a new page
+        if (cursorY + 10 > pageHeight - margin) {
+          doc.addPage();
+          cursorY = margin; // Reset cursor to top of new page
+        }
+        doc.text(line, margin, cursorY);
+        cursorY += 7; // Line spacing
+      });
+
+      doc.save("Heaven_MultiPage_Doc.pdf");
     }
 
     // --- PDF TO TEXT LOGIC ---
@@ -177,12 +191,12 @@
       const copyBtn = document.getElementById('copyBtn');
       
       if (!fileInput.files[0]) {
-        alert("Please upload a PDF first!");
+        alert("Upload a PDF!");
         return;
       }
 
       resultArea.style.display = 'block';
-      resultArea.innerText = "🌀 Processing your PDF... Please wait.";
+      resultArea.innerText = "🌀 Heaven is reading all pages... Please wait.";
       copyBtn.style.display = 'none';
 
       const file = fileInput.files[0];
@@ -194,34 +208,7 @@
           const pdf = await pdfjsLib.getDocument(typedarray).promise;
           let extractedText = "";
 
-          // Loop through all pages
           for (let i = 1; i <= pdf.numPages; i++) {
             const page = await pdf.getPage(i);
-            const content = await page.getTextContent();
-            const pageStrings = content.items.map(item => item.str);
-            extractedText += pageStrings.join(' ') + "\n\n";
-          }
-
-          if (extractedText.trim().length === 0) {
-            resultArea.innerText = "❌ No text found. This PDF might be an image/scan.";
-          } else {
-            resultArea.innerText = extractedText;
-            copyBtn.style.display = 'block';
-          }
-        } catch (err) {
-          resultArea.innerText = "❌ Error reading PDF: " + err.message;
-        }
-      };
-
-      reader.readAsArrayBuffer(file);
-    }
-
-    function copyResult() {
-      const text = document.getElementById('textResult').innerText;
-      navigator.clipboard.writeText(text).then(() => {
-        alert("Copied to clipboard!");
-      });
-    }
-  </script>
-</body>
-</html>
+            const
+              
